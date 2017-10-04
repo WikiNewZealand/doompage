@@ -1,37 +1,26 @@
-## Welcome to GitHub Pages
+## Figure.NZ Doom Page
+This repository generates (via jekyll) a static 503 page to be served as an alternative to the Figure.NZ application stack.
 
-You can use the [editor on GitHub](https://github.com/WikiNewZealand/doompage/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+### Purpose
+In the event of a catastrophic failure of the Figure.NZ application stack, this page serves as the last line of defence, serving a branded error message from an unrelated host and without any external asset dependencies. 
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+### Known issues
+A significant upstream failure (eg. the loss of AWS) will stop this from working, partly because deployment requires access to Route 53 (and for Route 53 to then serve the changed records), and partly because a serious AWS outage would probably disable GitHub as well.
 
-### Markdown
+### How to deploy
+1. Log into AWS.
+2. Go to Route 53 (screenshot).
+2. Remove the A record from the *figure.nz* record set.
+3. Replace it with A records for the following addresses:  
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+```
+192.30.252.153
+192.30.252.154
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
 
-### Jekyll Themes
+2. Remove the ELBs and instead point the figure.nz apex at 
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/WikiNewZealand/doompage/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+### How to recover
+EC2 / Load Balancers / website2-prod / DNS name:
+website2-prod-1335915850.ap-southeast-2.elb.amazonaws.com (A Record)
